@@ -1,21 +1,17 @@
-import React from "react";
+import TaskItem from "./TaskItem";
 
-const TaskList = ({ tasks, onCompleteTask, onDeleteTask }) => {
+function TaskList({ tasks, fetchTasks }) {
   return (
-    <ul>
-      {tasks.map((task) => (
-        <li
-          key={task.id}
-          style={{ textDecoration: task.status ? "line-through" : "none" }}
-        >
-          <h3>{task.title}</h3>
-          <p>{task.description}</p>
-          <button onClick={() => onCompleteTask(task.id)}>Complete</button>
-          <button onClick={() => onDeleteTask(task.id)}>Delete</button>
-        </li>
-      ))}
-    </ul>
+    <div>
+      {tasks.length === 0 ? (
+        <p>No tasks available</p>
+      ) : (
+        tasks.map((task) => (
+          <TaskItem key={task.id} task={task} fetchTasks={fetchTasks} />
+        ))
+      )}
+    </div>
   );
-};
+}
 
 export default TaskList;

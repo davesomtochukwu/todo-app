@@ -1,0 +1,18 @@
+.container {
+  max-width: 500px;
+  margin: auto;
+  text-align: center;
+}
+
+.task-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  border: 1px solid #ccc;
+  margin-top: 10px;
+}
+
+.task-item.completed {
+  text-decoration: line-through;
+  color: gray;
+}

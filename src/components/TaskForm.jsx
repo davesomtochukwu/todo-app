@@ -1,16 +1,25 @@
-import React from "react";
 import { useState } from "react";
+import Parse from "parse/dist/parse.min.js";
 
-const TaskForm = ({ onAddTask }) => {
+function TaskForm({ fetchTasks }) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!title.trim()) return;
-    onAddTask({ title, description });
-    setTitle("");
-    setDescription("");
+    try {
+      const Task = Parse.Object.extend("Task");
+      const task = new Task();
+      task.set("title", title);
+      task.set("description", description);
+      task.set("completed", false);
+      await task.save();
+      fetchTasks();
+      setTitle("");
+      setDescription("");
+    } catch (error) {
+      console.error("Error adding task:", error);
+    }
   };
 
   return (
@@ -22,14 +31,16 @@ const TaskForm = ({ onAddTask }) => {
         onChange={(e) => setTitle(e.target.value)}
         required
       />
-      <textarea
-        placeholder="Task Description"
+      <input
+        type="text"
+        placeholder="Description"
         value={description}
         onChange={(e) => setDescription(e.target.value)}
+        required
       />
       <button type="submit">Add Task</button>
     </form>
   );
-};
+}
 
 export default TaskForm;

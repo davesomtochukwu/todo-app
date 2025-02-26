@@ -1,24 +1,16 @@
-# Use an official lightweight Node.js image
-FROM node:18-alpine AS build
+# Use an official Nginx base image
+FROM nginx:alpine
 
 # Set working directory
-WORKDIR /app
+WORKDIR /usr/share/nginx/html
 
-# Copy package.json and install dependencies
-COPY package.json package-lock.json ./
-RUN npm install
+# Remove default Nginx static files
+RUN rm -rf ./*
 
-# Copy project files
-COPY . .
+# Copy built React files into the container
+COPY dist .
 
-# Build the project
-RUN npm run build
-
-# Use an Nginx server for efficient static file serving
-FROM nginx:alpine
-COPY --from=build /app/dist /usr/share/nginx/html
-
-# Expose port 80
+# Expose the default Nginx port
 EXPOSE 80
 
 # Start Nginx
